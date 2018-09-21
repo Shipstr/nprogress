@@ -224,7 +224,6 @@
     return document.querySelector(Settings.parent + ' > .nprogress');
   }
 
-
   /**
    * (Internal) renders the progress bar markup based on the `template`
    * setting.
