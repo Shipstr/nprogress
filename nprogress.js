@@ -4,17 +4,17 @@
 ;(function(root, factory) {
 
   if (typeof define === 'function' && define.amd) {
-    define(factory);
+    define(function() {return factory});
   } else if (typeof exports === 'object') {
-    module.exports = factory();
+    module.exports = factory;
   } else {
-    root.NProgress = factory();
+    root.NProgress = factory;
   }
 
 })(this, function() {
   var NProgress = {};
 
-  NProgress.version = '0.2.0';
+  NProgress.version = '0.3.0';
 
   var Settings = NProgress.settings = {
     minimum: 0.08,
@@ -217,17 +217,26 @@
   })();
 
   /**
+   * (Internal) get the rendered element
+   */
+
+  NProgress.getElement = function() {
+    return document.querySelector(Settings.parent + ' > .nprogress');
+  }
+
+
+  /**
    * (Internal) renders the progress bar markup based on the `template`
    * setting.
    */
 
   NProgress.render = function(fromStart) {
-    if (NProgress.isRendered()) return document.getElementById('nprogress');
+    if (NProgress.isRendered()) return NProgress.getElement();
 
     addClass(document.documentElement, 'nprogress-busy');
 
     var progress = document.createElement('div');
-    progress.id = 'nprogress';
+    progress.className = 'nprogress'
     progress.innerHTML = Settings.template;
 
     var bar      = progress.querySelector(Settings.barSelector),
@@ -258,9 +267,10 @@
    */
 
   NProgress.remove = function() {
+    NProgress.status = null;
     removeClass(document.documentElement, 'nprogress-busy');
     removeClass(document.querySelector(Settings.parent), 'nprogress-custom-parent');
-    var progress = document.getElementById('nprogress');
+    var progress = NProgress.getElement();
     progress && removeElement(progress);
   };
 
@@ -269,7 +279,7 @@
    */
 
   NProgress.isRendered = function() {
-    return !!document.getElementById('nprogress');
+    return !!NProgress.getElement();
   };
 
   /**
