@@ -257,7 +257,7 @@
       addClass(parent, 'nprogress-custom-parent');
     }
 
-    parent.appendChild(progress);
+    parent && parent.appendChild(progress);
     return progress;
   };
 
@@ -444,7 +444,7 @@
     var oldList = classList(element),
         newList = oldList + name;
 
-    if (hasClass(oldList, name)) return;
+    if (!element || hasClass(oldList, name)) return;
 
     // Trim the opening space.
     element.className = newList.substring(1);
@@ -458,7 +458,7 @@
     var oldList = classList(element),
         newList;
 
-    if (!hasClass(element, name)) return;
+    if (!element || !hasClass(element, name)) return;
 
     // Replace the class name.
     newList = oldList.replace(' ' + name + ' ', ' ');
